@@ -1,6 +1,12 @@
 #ifndef CELL_H
 #define CELL_H
 
+enum constants {
+    False,
+    True,
+    VALUE_SET,
+};
+
 class Cell{
     private:
     int value;
@@ -10,14 +16,15 @@ class Cell{
     public:
     Cell(int value=0) {
         this->value = value;
-        if(value != 0)
+        if(value != 0) {
             optionsLeft = 1;
+        }
     }
-
     bool hasValue();
     int getValue();
     void setValue(int value);
-    bool strikeOption(int number);
+    int* getOptions();
+    int strikeOption(int number);
 
 };
 

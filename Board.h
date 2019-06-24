@@ -5,10 +5,13 @@
 
 class Board {
     private:
-    Cell grid[9][9];
     int boardSide = 9;
+    int checkRow(int rowNo);
+    int checkCol(int colNo);
+    int checkBox(int boxNo);
 
     public:
+    Cell grid[9][9];
     Board(int array[][9] = nullptr)
     {
         if(array != nullptr) {
@@ -20,7 +23,9 @@ class Board {
         }
     }
 
+    void solveBoard();
     void printBoard();
+
 };
 
 #endif

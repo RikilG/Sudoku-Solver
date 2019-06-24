@@ -12,23 +12,37 @@ int Cell::getValue() {
 
 void Cell::setValue(int value) {
     this->value = value;
+    if(value == 0)
+        return;
+    for(int i=0;i<10;i++)
+        options[i] = 0;
+    options[value] = 1;
+    optionsLeft = 1;
 }
 
 // Remove an option from the list of numbers (1-9)
-bool Cell::strikeOption(int number) {
+int Cell::strikeOption(int number) {
     if(number>9)
-        return false;
+        return False;
     else if(optionsLeft == 1)   // the cell contains only one number left which is the value of the cell
-        return false;
-    options[number] = 0;
-    optionsLeft -= 1;
-    if(optionsLeft == 1) {      // we have only one option left. so find the option and set it as value
-        for(int i=1;i<10;i++) { // array indices run from 1 to 9
-            if(options[i] == 1) {
-                value = i;
-                break;
+        return False;
+    
+    if(options[number] != 0) {
+        optionsLeft -= 1;
+        options[number] = 0;
+        if(optionsLeft == 1) {      // we have only one option left. so find the option and set it as value
+            for(int i=1;i<10;i++) { // array indices run from 1 to 9
+                if(options[i] == 1) {
+                    value = i;
+                    return VALUE_SET;
+                }
             }
         }
+        return True;
     }
-    return true;
+    return False;
+}
+
+int* Cell::getOptions() {
+    return options;
 }
