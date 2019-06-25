@@ -1,6 +1,8 @@
 #ifndef CELL_H
 #define CELL_H
 
+#include <vector>
+
 enum constants {
     False,
     True,
@@ -23,7 +25,7 @@ class Cell{
     bool hasValue();
     int getValue();
     void setValue(int value);
-    int* getOptions();
+    std::vector<int> getOptions();
     int strikeOption(int number);
 
 };

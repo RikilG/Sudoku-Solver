@@ -1,4 +1,5 @@
 #include "Cell.h"
+#include <vector>
 
 bool Cell::hasValue() {
     if(value == 0)
@@ -43,6 +44,11 @@ int Cell::strikeOption(int number) {
     return False;
 }
 
-int* Cell::getOptions() {
-    return options;
+std::vector<int> Cell::getOptions() {
+    std::vector<int> posNumbers;
+    for(int i=1;i<10;i++) {
+        if(options[i] == 1)
+            posNumbers.push_back(i);
+    }
+    return posNumbers;
 }

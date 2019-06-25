@@ -6,9 +6,6 @@
 class Board {
     private:
     int boardSide = 9;
-    int checkRow(int rowNo);
-    int checkCol(int colNo);
-    int checkBox(int boxNo);
 
     public:
     Cell grid[9][9];
@@ -25,6 +22,7 @@ class Board {
 
     void solveBoard();
     void printBoard();
+    bool checkValue(int x, int y, int ans);
 
 };
 

@@ -1,7 +1,7 @@
 solver: main.o Cell.o Board.o strategies.o
 	g++ Cell.o Board.o main.o strategies.o -o solver
 
-main.o: main.cpp
+main.o: main.cpp Examples.h
 	g++ -c main.cpp
 
 Cell.o: Cell.h Cell.cpp

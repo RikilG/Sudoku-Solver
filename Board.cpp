@@ -21,4 +21,11 @@ void Board::printBoard() {
 
 void Board::solveBoard() {
     nakedSingle(*this);
+    std::cout << "affected elements after naked single : " << valuesSet << "\n";
+    hiddenSingle(*this); // requires nakedSingle to run atleast once to rule out row/col/block illegal values
+    std::cout << "affected elements after hidden single: " << valuesSet << "\n";
+}
+
+bool Board::checkValue(int x, int y, int ans) {
+    return grid[x][y].getValue() == ans;
 }
