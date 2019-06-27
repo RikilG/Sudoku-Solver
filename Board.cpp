@@ -22,10 +22,42 @@ void Board::printBoard() {
 void Board::solveBoard() {
     nakedSingle(*this);
     std::cout << "affected elements after naked single : " << valuesSet << "\n";
+    printBoard();
     hiddenSingle(*this); // requires nakedSingle to run atleast once to rule out row/col/block illegal values
     std::cout << "affected elements after hidden single: " << valuesSet << "\n";
+    printBoard();
+    backtracking(*this);
+    bool check = checkSudoku(*this);
+    if(check)
+        std::cout << ">>> Sudoku Solution Correct!!\n";
+    else
+        std::cout << ">>> Sudoku Solution INCORRECT\n";
 }
 
 bool Board::checkValue(int x, int y, int ans) {
     return grid[x][y].getValue() == ans;
+}
+
+int Board::getBlockNo(int rowNo, int colNo) {
+    int blockRow = rowNo/3;
+    int blockCol = colNo/3;
+    return 3*blockRow + blockCol;
+}
+
+//--------------------------Block-functions-----------------------------------------------------------
+
+std::vector<int> Board::Block::getValues() {
+    std::vector<int> values;
+    for(int i=startRow;i<startRow+3;i++) {
+        for(int j=startCol;j<startCol+3;j++) {
+            if((*parent).grid[i][j].hasValue()) {
+                values.push_back((*parent).grid[i][j].getValue());
+            }
+        }
+    }
+    return values;
+}
+
+int Board::Block::getBlockNo() {
+    return (*parent).getBlockNo(startRow, startCol);
 }

@@ -7,11 +7,18 @@
 int valuesSet = 0;
 
 //private function prototypes
+int backtrack_recur(Board& board, int rowNo, int colNo);
 int nakedSingle_checkRow(int rowNo, Board& board);
 int nakedSingle_checkCol(int colNo, Board& board);
 int nakedSingle_checkBlock(int blockNo, Board& board);
 int hiddenSingle_checkRow(int rowNo, Board& board);
 int hiddenSingle_checkCol(int colNo, Board& board);
+
+int backtracking(Board& board) {
+    int noOfChanges = 0;
+    backtrack_recur(board, 0, 0);
+    return noOfChanges;
+}
 
 int nakedSingle(Board& board) {
     // checks rows, cols, blocks and fills only possibility cells by crossing off others.
@@ -45,6 +52,100 @@ int hiddenSingle(Board& board) {
 int blkColRowInteractions(Board& board) {
     int totalChanges = 0;
     return totalChanges;
+}
+
+bool checkSudoku(Board& board) {
+    //check rows and cols
+    for(int i=0;i<boardSide;i++) {
+        int row[10] = {0};
+        int col[10] = {0};
+        int block[10] = {0};
+        auto blockValues = board.blocks[i].getValues();
+        if(blockValues.size() != boardSide)
+            return false;
+        for(int j=0;j<boardSide;j++) { // get row and col values
+            row[ board.grid[i][j].getValue() ] = 1;
+            col[ board.grid[j][i].getValue() ] = 1;
+            block[ blockValues[j] ] = 1;
+        }
+        int rowSum = 0, colSum = 0, blockSum = 0;
+        for(int k=1;k<=boardSide;k++) {
+            rowSum += row[k];
+            colSum += col[k];
+            blockSum+=block[k];
+        }
+        if(rowSum!=9 || colSum!=9 || blockSum!=9) {
+            return false;
+        }
+    }
+    return true;
+}
+
+//-------------------------------Helper-Functions-----------------------------------------------------
+
+int backtrack_optionAvailable(Board& board, int rowNo, int colNo, int value) {
+    if(rowNo>=boardSide || colNo>=boardSide || board.grid[rowNo][colNo].hasValue() || value>boardSide)
+        return 0;
+    for(int i=0;i<boardSide;i++) {
+        if(board.grid[rowNo][i].getValue() == value) // found this value somewhere in same row
+            return 0;
+    }
+    for(int i=0;i<boardSide;i++) {
+        if(board.grid[i][colNo].getValue() == value) // found this value somewhere in same col
+            return 0;
+    }
+    int blockNo = board.getBlockNo(rowNo, colNo);
+    auto blockValues = board.blocks[blockNo].getValues();
+    for(int& blockValue: blockValues) {
+        if(value == blockValue) {                   // found this value in list of block values
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int backtrack_setCoords(int& rowNo, int& colNo) {
+    if(rowNo<=boardSide-1 && colNo<boardSide-1)
+        colNo++;
+    else if(colNo==boardSide-1 && rowNo==boardSide-1)
+        return 0;
+    else if(colNo==boardSide-1) {
+        colNo = 0;
+        rowNo++;
+    }
+    return 1;
+}
+
+int backtrack_recur(Board& board, int rowNo, int colNo) {
+    //base case
+    if(rowNo>=boardSide || colNo>=boardSide || board.grid[rowNo][colNo].hasValue())
+        return 0;
+
+    //recursion
+    auto cellOptions = board.grid[rowNo][colNo].getOptions();
+    for(auto& option: cellOptions) {
+        if(backtrack_optionAvailable(board, rowNo, colNo, option)) {
+            board.grid[rowNo][colNo].setValue(option); // give the cell a possible value
+            int nextCoordsPossible;
+            int x = rowNo;
+            int y = colNo;
+            while(x<boardSide && y<boardSide) {
+                nextCoordsPossible = backtrack_setCoords(x, y);
+                if(nextCoordsPossible == 0) { // no next grid possible and this cell is VALUE_SET
+                    return 1;
+                }
+                if(!board.grid[x][y].hasValue()) {
+                    // std::cout << "has value: " << board.grid[rowNo][colNo].getValue() << ", rowNo: " << rowNo << ", colNo: " << colNo << "\n";
+                    break;
+                }
+            }
+            if(backtrack_recur(board, x, y) == 1) { //solution found!!
+                return 1;
+            }
+        }
+        board.grid[rowNo][colNo].setOptions(cellOptions);
+    }
+    return 0;
 }
 
 int nakedSingle_checkRow(int rowNo, Board& board) {

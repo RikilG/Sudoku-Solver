@@ -25,6 +25,7 @@ class Cell{
     bool hasValue();
     int getValue();
     void setValue(int value);
+    void setOptions(std::vector<int>& cellOptions);
     std::vector<int> getOptions();
     int strikeOption(int number);
 

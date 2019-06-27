@@ -21,6 +21,18 @@ void Cell::setValue(int value) {
     optionsLeft = 1;
 }
 
+void Cell::setOptions(std::vector<int>& cellOptions) {
+    for(int i=0;i<10;i++)
+        options[i] = 0;
+    for(int& option: cellOptions)
+        options[option] = 1;
+    if(cellOptions.size() == 1)
+        value = cellOptions[0];
+    else
+        value = 0;
+    optionsLeft = cellOptions.size();
+}
+
 // Remove an option from the list of numbers (1-9)
 int Cell::strikeOption(int number) {
     if(number>9)
