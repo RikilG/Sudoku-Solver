@@ -3,7 +3,7 @@
 For more info about theese strategies, take a look at [this](https://puzzling.stackexchange.com/questions/30519/techniques-to-solve-this-sudoku-puzzle/30540#30540)
 
 Strategies:
- - [ ] Backtracking (worst algo with checking all possible combinations)
+ - [X] Backtracking (worst algo with checking all possible combinations)
  - [X] Naked Single
  - [X] Hidden Single
  - [ ] Block-Column-Row Interactions
